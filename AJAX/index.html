@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ajax Tutorial</title>
+</head>
+
+<body>
+    <form action="">
+        <h2>Checking Username from a file on the Server</h2>
+        <label for="username">Enter the username</label>
+        <input type="text" name="username" id="username" required onkeyup="checkuser(this.value)">
+        <label for="message" id="msg"></label>
+        <hr>
+        <h2>Checking username from Database</h2>
+        <label for="usernamedb">Enter the username</label>
+        <input type="text" name="usernamedb" id="usernamedb" required onkeyup="checkuserdb(this.value)">
+        <label for="messagedb" id="msgdb"></label>
+    </form>
+</body>
+<script>
+    function checkuser(str) {
+            var xhttp;
+            if (str == "") {
+                document.getElementById("msg").innerHTML = "";
+                return;
+            }
+            xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    document.getElementById("msg").innerHTML = this.responseText;
+                }
+            };
+            xhttp.open("POST", "checkuserarray.php", true);
+            xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            xhttp.send("username=" + str);
+        }
+        function checkuserdb(str) {
+            var xhttp;
+            if (str == "") {
+                document.getElementById("msg").innerHTML = "";
+                return;
+            }
+            xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    document.getElementById("msgdb").innerHTML = this.responseText;
+                }
+            };
+            xhttp.open("POST", "checkusername.php", true);
+                    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                    xhttp.send("username=" + str);
+                }
+            </script>
+
+</html>
+
+checkuserarray.php
+<?php
+
+$username = $_POST['username'];
+$result="";
+$users = array("Satish","Ram","Jeff","Mohan","Mathew");
+foreach($users as $value)
+if (stristr($username,substr($value,0,strlen($username))))
+{
+      $result.= " $value ";   
+}
+
+if($result !=null)
+{
+    echo $result;
+}
+else
+{
+    echo "0 results";
+}
+?>
